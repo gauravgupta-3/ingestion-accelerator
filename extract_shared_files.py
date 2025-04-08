@@ -27,7 +27,7 @@ def archive_local_src_file(local_file_path,source_archival_path,file_name):
         logger.error(ex)
 
 @flow(log_prints=True)
-def extract_shared_windows_file():
+def extract_shared_file():
     logger = get_run_logger()
     logger.info('Start execution to capture metadata details')
     ##Read configuration variables
@@ -94,7 +94,7 @@ def extract_shared_windows_file():
 
 
 if __name__ == "__main__":
-    extract_shared_windows_file()
+    extract_shared_file()
 
 
 
