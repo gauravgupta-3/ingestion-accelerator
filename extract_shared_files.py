@@ -21,7 +21,7 @@ def archive_local_src_file(local_file_path,source_archival_path,file_name):
     logger = get_run_logger()
     try:
         shutil.move(local_file_path,source_archival_path)
-        logger.info("File Successfully Archived: {file_name}")
+        logger.info('File Successfully Archived: {}'.format(file_name))
     except Exception as ex:
         logger.error("File cannot be archived")
         logger.error(ex)
