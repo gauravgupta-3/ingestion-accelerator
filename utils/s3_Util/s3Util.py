@@ -5,18 +5,19 @@ import logging
 import pyarrow as pa
 import pyarrow.parquet as pq
 import io
-from prefect import flow, task
+from prefect import flow, task, get_run_logger
 
-logger = logging.getLogger()
-logger.setLevel(level=logging.INFO)
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(name)s:%(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+# logger = logging.getLogger()
+# logger.setLevel(level=logging.INFO)
+# logging.basicConfig(format='%(asctime)s %(levelname)s:%(name)s:%(message)s',
+#                     datefmt='%Y-%m-%d %H:%M:%S')
 
             
 s3 = boto3.resource('s3')     
              
 @task                    
 def s3_delete_file(s3_bucket_name,s3_key):
+    logger = get_run_logger()
     """ Delete files from a bucket.
 
         :param bucket_name: Bucket name
@@ -28,6 +29,7 @@ def s3_delete_file(s3_bucket_name,s3_key):
 
 @task
 def s3_upload_file_parquet(s3_bucket_name,s3_key,df,extension):
+    logger = get_run_logger()
     """ Convert to parquet and upload files to s3 bucket.
 
         :param bucket_name: Bucket name

@@ -6,12 +6,12 @@ from utils.db_Util.dbUtil import sql_server_connect
 from config.config import read_config
 from io import StringIO
 import datetime
-from prefect import flow, task
+from prefect import flow, task, get_run_logger
 
-logger = logging.getLogger()
-logger.setLevel(level=logging.INFO)
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(name)s:%(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+# logger = logging.getLogger()
+# logger.setLevel(level=logging.INFO)
+# logging.basicConfig(format='%(asctime)s %(levelname)s:%(name)s:%(message)s',
+#                     datefmt='%Y-%m-%d %H:%M:%S')
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -19,6 +19,8 @@ pd.set_option("display.precision", 3)
 
 @flow(log_prints=True)
 def extract_api():
+    logger = get_run_logger()
+    logger.info('Start execution to capture metadata details')
     config_data = read_config()
     driver = config_data['driver']
     host = config_data['host']
