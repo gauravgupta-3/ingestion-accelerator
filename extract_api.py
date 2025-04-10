@@ -24,10 +24,12 @@ def extract_api():
     config_data = read_config()
     driver = config_data['driver']
     host = config_data['host']
+    user = config_data['user']
+    pwd = config_data['pwd']
     metadata_database = config_data['metadata_database']
     metadata_api_table = config_data['metadata_api_table']
     ##Read dbms metadata
-    cnxn_metadata = sql_server_connect(driver,host,metadata_database)
+    cnxn_metadata = sql_server_connect(driver,host,user,pwd,metadata_database)
     sql_query_metadata = f"select * from {metadata_api_table}"
     metadata_df = pd.read_sql(sql_query_metadata,cnxn_metadata)
     print("Metadata df:\n {}".format(metadata_df.to_string()))

@@ -6,14 +6,18 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import io
 from prefect import flow, task, get_run_logger
+from prefect_aws import AwsCredentials
 
 # logger = logging.getLogger()
 # logger.setLevel(level=logging.INFO)
 # logging.basicConfig(format='%(asctime)s %(levelname)s:%(name)s:%(message)s',
 #                     datefmt='%Y-%m-%d %H:%M:%S')
 
+aws_cred_block = AwsCredentials.load("aws-credentials")
+session = aws_cred_block.get_boto3_session()
+s3 = session.resource("s3")
             
-s3 = boto3.resource('s3')     
+#s3 = boto3.resource('s3')     
              
 @task                    
 def s3_delete_file(s3_bucket_name,s3_key):
@@ -45,7 +49,7 @@ def s3_upload_file_parquet(s3_bucket_name,s3_key,df,extension):
     pq.write_table(table, parquet_buffer)
     data = parquet_buffer.getvalue()
     parquet_buffer.seek(0)
-    s3 = boto3.resource('s3')
+    #s3 = boto3.resource('s3')
     s3.Object(s3_bucket_name,parquet_key).put(Body=data)
     logger.info('File uploaded successfully to s3: {}'.format(parquet_key))
 

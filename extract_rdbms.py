@@ -9,6 +9,7 @@ from utils.s3_Util.s3Util import s3_delete_file,s3_upload_file_parquet
 from config.config import read_config
 from prefect import flow, task, get_run_logger
 
+
 # logger = logging.getLogger()
 # logger.setLevel(level=logging.INFO)
 # logging.basicConfig(format='%(asctime)s %(levelname)s:%(name)s:%(message)s',
@@ -31,10 +32,12 @@ def extract_rdbms():
     config_data = read_config()
     driver = config_data['driver']
     host = config_data['host']
+    user = config_data['user']
+    pwd = config_data['pwd']
     metadata_database = config_data['metadata_database']
     metadata_rdbms_table = config_data['metadata_rdbms_table']
     ##Read dbms metadata
-    cnxn_metadata = sql_server_connect(driver,host,metadata_database)
+    cnxn_metadata = sql_server_connect(driver,host,user,pwd,metadata_database)
     sql_query_metadata = f"select * from {metadata_rdbms_table}"
     metadata_df = pd.read_sql(sql_query_metadata,cnxn_metadata)
     print("Metadata df:\n {}".format(metadata_df.to_string()))

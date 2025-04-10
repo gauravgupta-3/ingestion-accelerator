@@ -9,6 +9,6 @@ if __name__ == "__main__":
         entrypoint="extract_api.py:extract_api", # Specific flow to run
     ).deploy(
         name="extract-api-deployment",
-        work_pool_name="my-work-pool",
+        work_pool_name="my-managed-pool",
         cron="0 * * * *",  # Run every hour
     )

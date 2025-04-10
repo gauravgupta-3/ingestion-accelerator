@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 import datetime
 import pandas as pd
 import logging
-
 from prefect import flow, task, get_run_logger
 
 # logger = logging.getLogger()
@@ -16,11 +15,12 @@ from prefect import flow, task, get_run_logger
     
              
 @task                    
-def sql_server_connect(driver,host,src_database):
+def sql_server_connect(driver,host,user,pwd,src_database):
     logger = get_run_logger()
     try:
         #cnxn = pyodbc.connect(driver = driver , host = host, database = src_database, Trusted_Connection='yes')
-        url = f'mssql+pyodbc://@' + host + '/' + src_database + '?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
+        #url = f'mssql+pyodbc://@' + host + '/' + src_database + '?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
+        url =  f'mssql+pyodbc://'+ user +':'+ pwd + '@' + host + '/' + src_database + '?driver=ODBC+Driver+17+for+SQL+Server'
         engine = sa.create_engine(url)
         cnxn = engine.connect()
         logger.info('Successfully connected to Database: {}'.format(src_database))
@@ -29,3 +29,4 @@ def sql_server_connect(driver,host,src_database):
         raise e
     else:
         return cnxn
+    
