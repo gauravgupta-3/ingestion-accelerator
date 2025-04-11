@@ -50,7 +50,7 @@ def extract_rdbms():
                 r_watermark_value = row.watermark_value - datetime.timedelta(seconds=row.delay_in_seconds)
                 sql_query =f"select * from {row.src_table_name} where {row.watermark_column}>cast('{r_watermark_value}' as datetime2)"
                 logger.info("Start incremental extraction from SQL server for table: {}".format(file_name))
-                cnxn=sql_server_connect(driver,host,row.src_database)
+                cnxn=sql_server_connect(driver,host,user,pwd,row.src_database)
                 sql_watermark = f"select max({row.watermark_column}) as c1 from {row.src_table_name}" 
                 sql_df = pd.read_sql(sql_query,cnxn)
                 if not sql_df.empty:
@@ -81,7 +81,7 @@ def extract_rdbms():
                 file_name = row.src_table_name
                 sql_query =f"select * from {row.src_table_name}"
                 logger.info("Start Full load extraction from SQL server for table: {}".format(file_name))
-                cnxn=sql_server_connect(driver,host,row.src_database)
+                cnxn=sql_server_connect(driver,host,user,pwd,row.src_database)
                 sql_df = pd.read_sql(sql_query,cnxn)
                 #print(sql_df.to_string())
                 if sql_df.empty:
@@ -100,7 +100,7 @@ def extract_rdbms():
                 sql_query =f"select * from {row.src_table_name}"
                 snapshot_timestamp = datetime.datetime.now().replace(microsecond = 0)
                 logger.info("Start Snapshot extraction from SQL server for table: {}".format(file_name))
-                cnxn=sql_server_connect(driver,host,row.src_database)
+                cnxn=sql_server_connect(driver,host,user,pwd,row.src_database)
                 sql_df = pd.read_sql(sql_query,cnxn)
                 if sql_df.empty:
                     logger.info("No data extracted for this run for {} table {}".format(file_name))
