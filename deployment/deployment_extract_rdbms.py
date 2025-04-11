@@ -19,6 +19,14 @@ if __name__ == "__main__":
     ).deploy(
         name="extract-rdbms-deployment",
         work_pool_name="my-managed-pool",
-        job_variables={"pip_packages": read_requirements()},
+        job_variables={"pip_packages": [
+
+'dateparser',
+'pandas',
+'prefect',
+'prefect-aws',
+'pyarrow',
+'pyodbc',
+'SQLAlchemy' ]},
         cron="0 * * * *",  # Run every hour
     )
